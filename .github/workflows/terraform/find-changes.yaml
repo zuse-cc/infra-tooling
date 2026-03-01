@@ -1,0 +1,32 @@
+name: find-changes
+
+on:
+  workflow_call:  
+    outputs:  
+      workspaces:
+        description: "Modified workspaces to plan"
+        value: ${{ jobs.find_changes.outputs.workspaces }}
+
+jobs:
+  find_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      workspaces: ${{ steps.find_changes.outputs.workspaces }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Find changes
+        id: find_changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -e -o pipefail
+          WORKSPACES=$(git diff $BASE_SHA $HEAD_SHA --diff-filter=ACMR --name-only "*.tf" \
+            | { grep -E -v '^templates|modules' || test $? = 1; } \
+            | xargs -I{} dirname "{}" \
+            | sort | uniq \
+            | jq -R -s -c -r 'split("\n")[:-1]')
+          echo "workspaces=$WORKSPACES" >> $GITHUB_OUTPUT

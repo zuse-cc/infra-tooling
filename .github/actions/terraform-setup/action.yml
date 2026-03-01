@@ -1,0 +1,30 @@
+name: Terraform Setup
+description: Installs Terraform, runs formatting checks, and initializes the workspace
+
+inputs:
+  workspace:
+    description: Path to the Terraform workspace
+    required: true
+  terraform_version:
+    description: Terraform version to install
+    required: true
+  github_token:
+    description: GitHub token for mise-action
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install tools
+      uses: jdx/mise-action@v2
+      with:
+        version: 2025.6.8
+        github_token: ${{ inputs.github_token }}
+        tool_versions: |
+          terraform ${{ inputs.terraform_version }}
+    - name: Terraform syntax & formatting checks
+      shell: bash
+      run: make check-fmt MODULE=${{ inputs.workspace }}
+    - name: Terraform init
+      shell: bash
+      run: terraform -chdir=${{ inputs.workspace }} init

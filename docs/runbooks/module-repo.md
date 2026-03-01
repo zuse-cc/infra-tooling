@@ -17,7 +17,7 @@
 ## Preconditions
 
 - Common workstation setup complete (link to guide, includes `gh`)
-- Access to organisations GitHub account
+- Access to organisations' GitHub account
 - Permissions to create repositories (birth-right for engineers)
 - Valid `$GITHUB_TOKEN` set in shell env
 

@@ -2,7 +2,7 @@
 
 **Owner:** Infra Team
 **On-Call:** #terraforge
-**Last Updated:** 2025-31-12
+**Est. Time:** 5-10 minutes
 
 ## Service Overview
 

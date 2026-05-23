@@ -24,7 +24,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -e -o pipefail
-          WORKSPACES=$(git diff $BASE_SHA $HEAD_SHA --diff-filter=ACMR --name-only "*.tf" \
+          WORKSPACES=$(git diff $BASE_SHA $HEAD_SHA --diff-filter=ACMRD --name-only "*.tf" \
             | { grep -E -v '^templates|modules' || test $? = 1; } \
             | xargs -I{} dirname "{}" \
             | sort | uniq \

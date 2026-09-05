@@ -28,5 +28,6 @@ jobs:
             | { grep -E -v '^templates|modules' || test $? = 1; } \
             | xargs -I{} dirname "{}" \
             | sort | uniq \
+            | while IFS= read -r dir; do if [ -d "$dir" ]; then echo "$dir"; fi; done \
             | jq -R -s -c -r 'split("\n")[:-1]')
           echo "workspaces=$WORKSPACES" >> $GITHUB_OUTPUT

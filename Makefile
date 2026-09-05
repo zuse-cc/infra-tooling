@@ -12,4 +12,4 @@ VERSION ?= $(shell \
 
 .PHONY: release
 release:
-	@echo gh release create $(VERSION) --title "Release $(VERSION)" --target main --generate-notes
+	gh release create $(VERSION) --title "Release $(VERSION)" --target main --generate-notes
